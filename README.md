@@ -2,20 +2,9 @@
 + A:web依赖
 + A:GET/hello接口
 
-- S:suc
-  - ApiPost: http//localhost:8080/hello
-
 # 第二步：配置路由规则
-<br>添加网关以后，无法直连</br>
-在 application.yml 中配置“网关路径 → 后端地址”的映射，例如：
-gateway:
-routes:
-- path: /api/users/**
-target: http://localhost:8081
-- path: /api/orders/**
-target: http://localhost:8082
-网关收到请求后，先根据路径找到匹配的路由。第一版只支持简单的路径前缀匹配即可。
-验收：已配置的路径能匹配到对应后端；未配置的路径返回 404。
++ 配置application.yml
++ 编写GetWay.java
 # 第三步：实现请求转发
 找到路由后，把请求转发到目标服务，并将后端的响应返回给前端。先支持 GET、POST，再补充其他 HTTP 方法；也要逐步处理查询参数、请求体、常用请求头和响应状态码。
 验收：准备两个简单的后端服务，通过不同网关路径访问，能看出请求分别到达了不同服务。

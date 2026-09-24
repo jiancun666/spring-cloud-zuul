@@ -1,0 +1,7 @@
+server:
+  port: 8081
+
+gateway:
+  routes:
+    - path: /api/user/**
+      target: http://localhost:8080
