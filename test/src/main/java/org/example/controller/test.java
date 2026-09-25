@@ -9,4 +9,10 @@ public class test {
     public String hello(){
         return "hello,world.";
     }
+
+    @GetMapping("add")
+    public int add(){return 10;}
+
+    @GetMapping("/SS")
+    public String SS(){return "PJL是骚狗";}
 }

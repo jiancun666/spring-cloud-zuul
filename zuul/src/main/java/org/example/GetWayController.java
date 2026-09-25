@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +18,15 @@ public class GetWayController {
             .connectTimeout(Duration.ofSeconds(3))
             .build();
 
-    @GetMapping("/api/user/test")
-    public ResponseEntity<String> test() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:8080/hello"))
+    @GetMapping("/api/user/**")
+    public ResponseEntity<String> proxy(HttpServletRequest incomingRequest)
+            throws IOException, InterruptedException {
+        String downstreamPath = incomingRequest.getRequestURI().substring("/api/user".length());
+        String query = incomingRequest.getQueryString();
+        String target = "http://localhost:8080" + downstreamPath
+                + (query == null ? "" : "?" + query);
+
+        HttpRequest request = HttpRequest.newBuilder(URI.create(target))
                 .timeout(Duration.ofSeconds(10))
                 .GET()
                 .build();
